@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 4000;
 
@@ -38,12 +38,24 @@ async function run() {
      await client.db("admin").command({ ping: 1 });
 
    const databaseMovies = client.db('moviePortal').collection('movies');
+
+
   
   app.get("/movies",async(req,res)=>{
     const cursor = databaseMovies.find();
     const result = await cursor.toArray();
     res.send(result);
   })
+
+  app.get("/movies/:id", async(req, res)=>{
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)};
+    const result = await databaseMovies.findOne(query);
+    res.send(result);
+
+  })
+
+
      app.post("/movies", async(req,res)=>{
       const movieInfo = req.body;
     console.log(movieInfo );

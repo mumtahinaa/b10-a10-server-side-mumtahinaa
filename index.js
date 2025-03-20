@@ -38,6 +38,7 @@ async function run() {
      await client.db("admin").command({ ping: 1 });
 
    const databaseMovies = client.db('moviePortal').collection('movies');
+   const FavoriteDb = client.db("favoriteMovies").collection("Fmovies");
 
 
   
@@ -62,6 +63,40 @@ async function run() {
 
      const data = await databaseMovies.insertOne(movieInfo );
      res.send(data);
+
+     });
+
+     app.delete("/movies/:id", async(req,res)=>{
+      const id = req.params.id;
+      console.log(id)
+       const query = {_id: new ObjectId(id)}
+       const deleteMovie = await databaseMovies.deleteOne(query);
+       res.send(deleteMovie);
+     });
+
+     //for favorite section
+     app.get("/favorite/:email", async (req, res) => {
+      const email  = req.params.email;
+      console.log("Email:", email);
+    
+      const cursor = FavoriteDb.find({ User: email });
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+     app.post("/favorite",async(req,res)=>{
+      const Fdata = req.body;
+      // console.log(Fdata);
+      const data = await FavoriteDb.insertOne(Fdata)
+      res.send(data);
+     });
+
+     app.delete("/favorite/:id",async(req,res)=>{
+      const id = req.params.id;
+      console.log(id)
+      const query = {_id: new ObjectId(id)}
+      const deleteFav = await FavoriteDb.deleteOne(query);
+      res.send(deleteFav);
 
      })
 

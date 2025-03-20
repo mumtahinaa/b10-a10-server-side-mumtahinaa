@@ -66,6 +66,19 @@ async function run() {
 
      });
 
+     app.put("/movies/:id", async(req,res)=>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const movie = req.body;
+
+      const updateMovie ={
+        $set:{
+          
+        }
+      }
+     })
+
      app.delete("/movies/:id", async(req,res)=>{
       const id = req.params.id;
       console.log(id)

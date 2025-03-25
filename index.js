@@ -43,10 +43,12 @@ async function run() {
 
   
   app.get("/movies",async(req,res)=>{
-    const cursor = databaseMovies.find();
+    const cursor = databaseMovies.find().sort({rating:-1});
     const result = await cursor.toArray();
     res.send(result);
   })
+
+ 
 
   app.get("/movies/:id", async(req, res)=>{
     const id = req.params.id;
@@ -71,12 +73,22 @@ async function run() {
       const filter = {_id: new ObjectId(id)}
       const options = { upsert: true };
       const movie = req.body;
+      console.log(movie);
 
       const updateMovie ={
         $set:{
-          
+            
+title:movie.title,
+poster:movie.poster,
+genre:movie.genre,
+releaseYear:movie.releaseYear,
+rating:movie.rating,
+duration:movie.duration,
+summary:movie.summary,
         }
       }
+      const result = await databaseMovies.updateOne(filter,updateMovie,options)
+      res.send(result);
      })
 
      app.delete("/movies/:id", async(req,res)=>{

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 const tvShows = require('./tvshows.json');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
@@ -7,11 +8,11 @@ const port = process.env.PORT || 4000;
 
 const app = express();
 
-// movie-portal12
-// PU7OipukqsR9xKph
 
-const uri = "mongodb+srv://movie-portal12:PU7OipukqsR9xKph@cluster0.vl8e1.mongodb.net/?appName=Cluster0";
 
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vl8e1.mongodb.net/?appName=Cluster0`;
+console.log(uri);
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,

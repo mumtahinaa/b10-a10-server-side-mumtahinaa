@@ -103,6 +103,11 @@ async function run() {
 
   
   app.get("/movies",async(req,res)=>{
+    const {searchParams} = req.query;
+    let option ={};
+if(searchParams){
+  option={title:{$regex:searchParams,$option:"i"}};
+}
     const cursor = databaseMovies.find().sort({rating:-1});
     const result = await cursor.toArray();
     res.send(result);
